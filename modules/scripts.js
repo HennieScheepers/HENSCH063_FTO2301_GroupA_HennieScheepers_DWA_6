@@ -1,12 +1,10 @@
 import { books } from "./data.js";
-import {
-  handlePreviewToggle,
-  handleSettingsOverlayToggle,
-  handleSettingsSave,
-  createSearchOverlay,
-  createPreviews,
-  handleShowMoreClick,
-} from "./eventHandlers.js";
+import { createPreviews } from "./createPreview.js";
+import { handlePreviewToggle } from "./previewToggle.js";
+import { handleShowMoreClick } from "./createPreview.js";
+import { createSearchOverlay } from "./createSearchOverlay.js";
+import { handleSettingsOverlayToggle } from "./settingsToggle.js";
+import { handleSettingsSave } from "./saveSettings.js";
 
 /**
  * Holds the length of books (imported form data.js).

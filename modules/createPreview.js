@@ -1,6 +1,9 @@
 import { authors, genres } from "./data.js";
 import { books, BOOKS_PER_PAGE } from "./data.js";
+import { handlePreviewClick } from "./previewClick.js";
+import { handleClickAversion } from "./clickAversion.js";
 import { searchButton } from "./scripts.js";
+
 /**
  * Global variables used to detect changes in genre, title, author
  * @type {String}
@@ -21,162 +24,6 @@ let CURRENTTITLE = "none";
  * This is used in later event handler to dictate how many books need to be displayed
  */
 export let PAGES = 1;
-/**
- * Event handler for when one of the Preview divs are clicked. On fire, this
- * event will take the dataset from the nearest HTML element with the class 'preview'
- * and assign it to variables
- */
-export const handlePreviewClick = (event) => {
-  event.preventDefault();
-  const overlay = document.querySelector("[data-list-active]");
-  overlay.toggleAttribute("open");
-  const target = event.target.closest(".preview");
-  const targetData = target.dataset;
-  const bookTitle = targetData.previewTitle;
-  const bookAuthor = targetData.previewAuthor;
-  const bookDescription = targetData.previewDescription;
-  const bookImageLink = targetData.previewImg;
-  const date = new Date(targetData.previewPublished);
-  const bookPublished = date.getFullYear();
-  const overlayTitle = document.querySelector("[data-list-title]");
-  const overlayImg = document.querySelector("[data-list-image]");
-  const overlayAuthor = document.querySelector("[data-list-subtitle]");
-  const overlayDescription = document.querySelector("[data-list-description]");
-
-  overlayTitle.innerHTML = `${bookTitle} (${bookPublished})`;
-  overlayAuthor.innerHTML = bookAuthor;
-  overlayImg.setAttribute("src", bookImageLink);
-  overlayDescription.innerHTML = bookDescription;
-};
-
-/**
- * The purpose of this even handler is to toggle the Preview overlay
- * (with attribute 'data-list-active) when the 'close' button on the preview
- * is clicked
- */
-export const handlePreviewToggle = () => {
-  // Variable to store the HTML element with the attribute 'data-list-active'
-  const overlay = document.querySelector("[data-list-active]");
-  overlay.toggleAttribute("open");
-};
-
-/**
- * Take the elements in the preview divs and averts their click events
- * towards the div click event in order to fire the handlePreviewClick event
- * @param {Event} event - Click event
- */
-export const handleClickAversion = (event) => {
-  const newPreview = event.target.closest(".preview");
-  newPreview.event;
-};
-
-/**
- * Event handler for when the user clicks the settings button at the top of the
- * header. This even
- *
- */
-export const handleSettingsOverlayToggle = () => {
-  const settingsOverlay = document.querySelector("[data-settings-overlay]");
-  settingsOverlay.toggleAttribute("open");
-};
-
-/**
- * Event handler for when the user changes the theme of the site. It is fired by
- * clicking the save button on the settings overlay
- */
-export const handleSettingsSave = (event) => {
-  /**
-   * Holds the color values for the day theme
-   * @type {Object}
-   */
-  const day = {
-    dark: "10, 10, 20",
-    light: "255, 255, 255",
-  };
-
-  /**
-   * Holds the color values for the night theme
-   * @type {Object}
-   */
-  const night = {
-    dark: "255, 255, 255",
-    light: "10, 10, 20",
-  };
-  event.preventDefault();
-  const form = document.querySelector("[data-settings-form]");
-  const formData = new FormData(form);
-  const result = Object.fromEntries(formData);
-  const isDay = result.theme === "day";
-
-  if (isDay) {
-    document.documentElement.style.setProperty("--color-light", day.light);
-    document.documentElement.style.setProperty("--color-dark", day.dark);
-  } else {
-    document.documentElement.style.setProperty("--color-dark", night.dark);
-    document.documentElement.style.setProperty("--color-light", night.light);
-  }
-  const overlay = document.querySelector("[data-settings-overlay]");
-  overlay.toggleAttribute("open");
-};
-
-/**
- * Event handler for the header search button. When clicked it will open the search
- * overlay and allow the user to input data that they would like the books to
- * be filtered by. This event handler is also used to create the options in both
- * the author and genre selectors
- */
-export const createSearchOverlay = () => {
-  const searchOverlay = document.querySelector("[data-search-overlay]");
-  searchOverlay.toggleAttribute("open");
-  const title = document.querySelector("[data-search-title]");
-  title.focus();
-  const genreSelector = document.querySelector("[data-search-genres]");
-  const authorSelector = document.querySelector("[data-search-authors]");
-
-  const option = document.createElement("option");
-  option.setAttribute("value", "any");
-  option.innerHTML = "All Authors";
-  authorSelector.appendChild(option);
-
-  const optionGenres = document.createElement("option");
-  optionGenres.setAttribute("value", "any");
-  optionGenres.innerHTML = "All Genres";
-  genreSelector.appendChild(optionGenres);
-
-  for (const i in authors) {
-    const authorName = authors[i];
-    const authorId = i;
-    const option = document.createElement("option");
-    option.setAttribute("value", authorId);
-    option.innerHTML = authorName;
-    authorSelector.appendChild(option);
-  }
-
-  for (const i in genres) {
-    const genreName = genres[i];
-    const genreId = i;
-    const option = document.createElement("option");
-    option.setAttribute("value", genreId);
-    option.innerHTML = genreName;
-    genreSelector.appendChild(option);
-  }
-};
-
-/**
- * This is the event handler for the button with the attribute 'data-list-button'.
- * This is also known as the 'Show More' button. Main function of this event handler
- * is to increment PAGES to tell createPreviews how many PAGES of preview divs
- * to display
- */
-export const handleShowMoreClick = () => {
-  PAGES++;
-  searchButton.click();
-
-  const searchOverlayCancelButton = document.querySelector(
-    "[data-search-cancel]"
-  );
-  searchOverlayCancelButton.click();
-};
 
 /**
  * Event handler used to create the previews. It is called on startup to create the
@@ -318,6 +165,22 @@ export const createPreviews = (event) => {
   } else {
     dataListButton.setAttribute("disabled", true);
   }
+
+  const searchOverlayCancelButton = document.querySelector(
+    "[data-search-cancel]"
+  );
+  searchOverlayCancelButton.click();
+};
+
+/**
+ * This is the event handler for the button with the attribute 'data-list-button'.
+ * This is also known as the 'Show More' button. Main function of this event handler
+ * is to increment PAGES to tell createPreviews how many PAGES of preview divs
+ * to display
+ */
+export const handleShowMoreClick = () => {
+  PAGES++;
+  searchButton.click();
 
   const searchOverlayCancelButton = document.querySelector(
     "[data-search-cancel]"
