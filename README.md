@@ -1,5 +1,6 @@
 # Book Connect
 
 - [HTML](index.html)
-- [data.js](data.js)
-- 
+- [DATA](data.js)
+- [EVENT HANDLERS](eventHandlers.js)
+- [SCRIPTS](scripts.js)
