@@ -1,3 +1,5 @@
 # Book Connect
 
-- [index.html](index.html)
+- [HTML](index.html)
+- [data.js](data.js)
+- 
