@@ -1,9 +1,5 @@
 # Book Connect
 
-<<<<<<< HEAD
-- [HTML](index.html)
-- [DATA](data.js)
-- [EVENT HANDLERS](eventHandlers.js)
-- [SCRIPTS](scripts.js)
-=======
-
+## Table Of Contents
+- [Book Connect](#book-connect)
+  - [Table Of Contents](#table-of-contents)
