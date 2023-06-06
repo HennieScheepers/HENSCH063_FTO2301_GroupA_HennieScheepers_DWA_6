@@ -1,4 +1,21 @@
 /**
+ * @param {Boolean} timeOfDay
+ * @param {object} day
+ * @param {object} night
+ */
+const checkTheme = (timeOfDay, day, night) => {
+  if (timeOfDay) {
+    document.documentElement.style.setProperty("--color-light", day.light);
+    document.documentElement.style.setProperty("--color-dark", day.dark);
+  } else {
+    document.documentElement.style.setProperty("--color-dark", night.dark);
+    document.documentElement.style.setProperty("--color-light", night.light);
+  }
+  const overlay = document.querySelector("[data-settings-overlay]");
+  overlay.toggleAttribute("open");
+};
+
+/**
  * Event handler for when the user changes the theme of the site. It is fired by
  * clicking the save button on the settings overlay
  */
@@ -26,13 +43,5 @@ export const handleSettingsSave = (event) => {
   const result = Object.fromEntries(formData);
   const isDay = result.theme === "day";
 
-  if (isDay) {
-    document.documentElement.style.setProperty("--color-light", day.light);
-    document.documentElement.style.setProperty("--color-dark", day.dark);
-  } else {
-    document.documentElement.style.setProperty("--color-dark", night.dark);
-    document.documentElement.style.setProperty("--color-light", night.light);
-  }
-  const overlay = document.querySelector("[data-settings-overlay]");
-  overlay.toggleAttribute("open");
+  checkTheme(isDay, day, night);
 };
